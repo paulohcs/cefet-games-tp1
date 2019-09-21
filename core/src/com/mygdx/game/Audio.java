@@ -14,10 +14,30 @@ import com.badlogic.gdx.audio.Sound;
  * @author a
  */
 public class Audio {
-    Sound[] sound = new Sound[18];
-    public Audio(){
-        for(int i = 0; i < 18; i++){
-            sound[i] = Gdx.audio.newSound(Gdx.files.internal("data/0.mp3"));
+
+    Music sea, emotion;
+
+    public Audio() {
+        sea = Gdx.audio.newMusic(Gdx.files.internal("data/sea.mp3"));
+        sea.setLooping(true);
+        emotion = Gdx.audio.newMusic(Gdx.files.internal("data/emotion.mp3"));
+        emotion.setLooping(true);
+    }
+
+    public void play(boolean emotion) {
+        if (emotion) {
+            this.emotion.play();
+        } else {
+            this.sea.play();
         }
     }
+
+    public void stop() {
+        this.emotion.stop();
+    }
+    
+    public void pause(){
+        this.emotion.pause();
+    }
+    
 }

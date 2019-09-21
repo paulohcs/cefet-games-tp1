@@ -15,8 +15,14 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  */
 class Mundo {
     private Texture textura;
+    private boolean idle;
     public Mundo(){
-        this.textura = new Texture("sea.jpg");
+        idle = false;
+        this.textura = new Texture("sea.png");
+    }
+    
+    public void setIdle(boolean idle){
+        this.idle = idle;
     }
     
     public void render(SpriteBatch batch) {

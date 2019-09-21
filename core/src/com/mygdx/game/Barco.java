@@ -25,7 +25,8 @@ public class Barco {
     private Vector2 velocidade;
     private Animation atual, navegarPraFrente, navegarPraCima, navegarPraBaixo;
     private float tempoDaAnimacao;
-    boolean ia;
+    private Texture spritesheet;
+    boolean idle;
 
     public float getPosicaoX() {
         return this.posicao.x;
@@ -34,18 +35,23 @@ public class Barco {
     public float getPosicaoY() {
         return this.posicao.y;
     }
-    
-    public double getTextureWidth(){
+
+    public double getTextureWidth() {
         return this.quadrosDaAnimacao[0][0].getRegionWidth() * 0.4;
     }
-    
-    public double getTextureHeight(){
+
+    public double getTextureHeight() {
         return this.quadrosDaAnimacao[0][0].getRegionHeight() * 0.4;
     }
+    
+    public void setIdle(boolean idle){
+        this.idle = idle;
+    }
 
-    public Barco(Texture spriteSheet) {
-        ia = false;
-        quadrosDaAnimacao = TextureRegion.split(spriteSheet, 61, 57);
+    public Barco() {
+        idle = false;
+        spritesheet = new Texture("boat.png");
+        quadrosDaAnimacao = TextureRegion.split(spritesheet, 61, 57);
         posicao = new Vector2();
         velocidade = new Vector2();
         posicao.x = 30;
@@ -98,14 +104,18 @@ public class Barco {
         batch.draw((TextureRegion) atual.getKeyFrame(tempoDaAnimacao), posicao.x, posicao.y, (float) (quadrosDaAnimacao[0][0].getRegionHeight() * 0.4), (float) (quadrosDaAnimacao[0][0].getRegionWidth() * 0.4));
     }
 
-    public void update() {
+    public boolean update() {
         tempoDaAnimacao += Gdx.graphics.getDeltaTime();
         posicao.x += velocidade.x * Gdx.graphics.getDeltaTime();
         posicao.y += velocidade.y * Gdx.graphics.getDeltaTime();
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            if (posicao.y < Gdx.graphics.getHeight() - quadrosDaAnimacao[0][0].getRegionHeight() * 0.4) {
+            if (posicao.y < Gdx.graphics.getHeight() - this.getTextureHeight()) {
                 velocidade.y = 15;
                 atual = navegarPraCima;
+            } else {
+                velocidade.x = 0;
+                velocidade.y = 0;
+                atual = navegarPraFrente;
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (posicao.x > 0) {
@@ -115,78 +125,33 @@ public class Barco {
             if (posicao.y > 0) {
                 velocidade.y = -15;
                 atual = navegarPraBaixo;
+            } else {
+                velocidade.x = 0;
+                velocidade.y = 0;
+                atual = navegarPraFrente;
             }
         } else if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (posicao.x < Gdx.graphics.getWidth() * 0.25) {
                 velocidade.x = 15;
             }
-        } else if (!ia) {
+        } else {
             velocidade.x = 0;
             velocidade.y = 0;
             atual = navegarPraFrente;
-        }
-    }
-
-    private boolean projetaColisao(Barco barco, Obstaculo obstaculo) {
-        if ((barco.posicao.y + ((barco.getTextureHeight())/2) >= obstaculo.getPosicao().y)
-                && (barco.posicao.y <= obstaculo.getPosicao().y + obstaculo.getTextureHeight())
-                && barco.posicao.x + barco.getTextureWidth() <= obstaculo.getPosicao().x) {
-            System.out.println("colisao by:"+barco.posicao.y+"oy:"+(obstaculo.getPosicao().y + obstaculo.getTextureHeight()));
-            return true;
-        } else {
             return false;
         }
+        return true;
     }
 
-    public void iaa(Obstaculo[] obstaculos) {
-        int menor = 0;
-        for (int i = 0; i < 5; i++) {
-            if (obstaculos[i].getPosicao().x < obstaculos[menor].getPosicao().x && 
-                    //this.posicao.x + this.getTextureWidth() <= obstaculos[i].getPosicao().x) {
-                    this.posicao.x + this.getTextureWidth() < obstaculos[i].getPosicao().x) {
-                menor = i;
+    public boolean checaColisao(Obstaculo[] obstaculos) {
+        for (int i = 0; i < obstaculos.length; i++) {
+            if ((this.posicao.x + this.getTextureWidth() >= obstaculos[i].getPosicao().x)
+                    && (this.posicao.x <= obstaculos[i].getPosicao().x + obstaculos[i].getTextureWidth())
+                    && (this.posicao.y + (this.getTextureHeight() / 2) >= obstaculos[i].getPosicao().y)
+                    && (this.posicao.y <= obstaculos[i].getPosicao().y + obstaculos[i].getTextureHeight())) {
+                return true;
             }
         }
-        System.out.println("barco x: "+this.posicao.x+" y:"+this.posicao.y);
-        System.out.println("menor" + menor);
-        if (projetaColisao(this, obstaculos[menor])) {
-            if(Gdx.graphics.getHeight() - (obstaculos[menor].getPosicao().y + obstaculos[menor].getTextureHeight()) > 
-                    this.posicao.y + this.getTextureHeight()){
-                atual = navegarPraCima;
-                this.velocidade.y = 15;
-            } else {
-                atual = navegarPraBaixo;
-                this.velocidade.y = -15;
-            }
-            /*if (obstaculos[menor].getPosicao().y + (obstaculos[menor].getTextura().getHeight() / 2)
-                    > this.posicao.y + ((this.quadrosDaAnimacao[0][0].getRegionHeight()*0.4) / 2)) {
-                System.out.println("ajustando baixo");
-                this.velocidade.y = -15;
-            } else {
-                System.out.println("ajustando cima");
-                this.velocidade.y = 15;
-            }*/
-            
-            /*if(obstaculos[menor].getPosicao().y + obstaculos[menor].getTextureHeight() < Gdx.graphics.getHeight()/2){
-                System.out.println("abaixo");
-                this.velocidade.y = 15;
-            } else {
-                System.out.println("acima");
-                 this.velocidade.y = -15;
-            }*/
-        } else {
-            atual = navegarPraFrente;
-            this.velocidade.y = 0;
-            System.out.println("prafrnee");
-        }
-        if (posicao.y < 0) {
-            System.out.println("zerandoaa");
-            velocidade.y = 0;
-            posicao.y = 0;
-        } else if (posicao.y > Gdx.graphics.getHeight() - this.getTextureHeight()){
-            System.out.println("zerando");
-            velocidade.y = 0;
-            posicao.y = (float) (Gdx.graphics.getHeight() - this.getTextureHeight());
-        }
+        return false;
     }
 }

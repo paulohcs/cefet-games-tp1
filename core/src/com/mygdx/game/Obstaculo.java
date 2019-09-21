@@ -19,50 +19,70 @@ import com.badlogic.gdx.math.Vector2;
  *
  * @author a
  */
-class Obstaculo {
+public class Obstaculo {
 
-    private Vector2 posicao;
+    protected Vector2 posicao;
     private Vector2 velocidade;
-    private Texture textura;
     private int ident;
+    private Texture textura;
+    private Vector2 size;
+    private boolean idle;
     Random gerador = new Random();
     
     public Vector2 getPosicao(){
         return this.posicao;
     }
     
-    public Texture getTextura(){
-        return this.textura;
+    public void setIdle(boolean idle){
+        if(idle){
+            this.velocidade.x *= 0.1;
+        } else {
+            this.velocidade.x *= 10;
+        }
     }
     
-    public double getTextureWidth(){
-        return this.textura.getWidth() * 0.1;
-    }
-    
-    public double getTextureHeight(){
-        return this.textura.getHeight() * 0.1;
-    }
-
     public Obstaculo(int ident) {
-        this.textura = new Texture("obs1.png");
+        this.idle = false;
+        this.textura = new Texture("obs"+ident+".png");
         posicao = new Vector2();
         velocidade = new Vector2();
+        size = new Vector2();
         this.posicao.x = Gdx.graphics.getWidth() + gerador.nextInt(1000);
-        this.posicao.y = gerador.nextInt(Gdx.graphics.getHeight()/2);
-        //this.posicao.y = 0;
-        this.velocidade.x = -200;
+        this.posicao.y = gerador.nextInt((int) (Gdx.graphics.getHeight()-this.getTextureHeight()));
+        this.velocidade.x = -100;
         this.ident = ident;
+        if(ident == 2){
+            size.x = (float) 0.3;
+            size.y = (float) 0.2;
+        } else {
+            size.x = (float) 0.08;
+            size.y = (float) 0.08;
+        }
     }
 
     public void render(SpriteBatch batch) {
-        batch.draw(this.textura, this.posicao.x, this.posicao.y, (float) (textura.getWidth()* 0.1), (float) (textura.getHeight()* 0.1));
+        batch.draw(this.textura, this.posicao.x, this.posicao.y, (float) (textura.getWidth()* size.x), (float) (textura.getHeight()* size.y));
         System.out.println(ident + " x: " + posicao.x + " y: " + posicao.y);
     }
 
     public void update() {
         if (posicao.x <= 0) {
-            posicao.x = Gdx.graphics.getWidth() + gerador.nextInt(1000);
+            this.posicao.x = Gdx.graphics.getWidth() + gerador.nextInt(1000);
+            this.posicao.y = gerador.nextInt((int) (Gdx.graphics.getHeight()-this.getTextureHeight()));
         }
         posicao.x += velocidade.x * Gdx.graphics.getDeltaTime();
+    }
+    
+    
+     public Texture getTextura(){
+        return this.textura;
+    }
+    
+    public double getTextureWidth(){
+        return this.textura.getWidth() * size.x;
+    }
+    
+    public double getTextureHeight(){
+        return this.textura.getHeight() * size.y;
     }
 }
