@@ -4,13 +4,12 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyGdxGame extends ApplicationAdapter {
 
     // Define a quantidade de obstáculos
-    static final int qntdObstaculos = 2; 
+    static final int qntdObstaculos = 3; 
 
     // Indicador de background e modo emoção
     boolean emotion;
@@ -30,6 +29,7 @@ public class MyGdxGame extends ApplicationAdapter {
     @Override
     // Instancia batch, audio, obstáculos, barco, iu e mundo
     public void create() { 
+        Gdx.graphics.setTitle("Titanic 2");
         
         emotion = false;
         idle = false;
