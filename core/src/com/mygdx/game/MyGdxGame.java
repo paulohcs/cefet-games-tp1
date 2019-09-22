@@ -9,32 +9,34 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class MyGdxGame extends ApplicationAdapter {
 
-    static final int qntdObstaculos = 2;
+    // Define a quantidade de obstáculos
+    static final int qntdObstaculos = 2; 
 
-    SpriteBatch batch;
-    Texture img;
-    Audio audio;
+    // Indicador de background e modo emoção
+    boolean emotion;
     boolean idle;
 
+    // Tempo para usar o modo background
     long tempoInicial;
 
+    // Objetos do jogo
     private Barco barco;
     Obstaculo[] obstaculos = new Obstaculo[qntdObstaculos];
     Mundo mundo;
     Iu iu;
-    boolean emotion;
+    SpriteBatch batch;
+    Audio audio;
 
     @Override
-    public void create() {
+    // Instancia batch, audio, obstáculos, barco, iu e mundo
+    public void create() { 
+        
         emotion = false;
         idle = false;
 
         tempoInicial = System.currentTimeMillis();
 
         batch = new SpriteBatch();
-        img = new Texture("badlogic.jpg");
-        MyInput inputProcessor = new MyInput();
-        Gdx.input.setInputProcessor(inputProcessor);
         audio = new Audio();
         audio.play(emotion);
 
@@ -51,6 +53,7 @@ public class MyGdxGame extends ApplicationAdapter {
         Gdx.gl.glClearColor(1, 1, 1, 1);
     }
 
+    // Reseta o jogo, quando há colisão
     public void reset() {
         tempoInicial = System.currentTimeMillis();
         barco = new Barco();
@@ -63,6 +66,7 @@ public class MyGdxGame extends ApplicationAdapter {
     }
 
     @Override
+    // Renderiza mundo, barco, iu e obstáculo
     public void render() {
         super.render();
         Gdx.gl.glClearColor(0, 0, 1, 1);
@@ -70,7 +74,6 @@ public class MyGdxGame extends ApplicationAdapter {
 
         update(Gdx.graphics.getDeltaTime());
         batch.begin();
-        //batch.draw(img, 0, 0);
         mundo.render(batch);
         for (int i = 0; i < qntdObstaculos; i++) {
             obstaculos[i].render(batch);
@@ -78,29 +81,28 @@ public class MyGdxGame extends ApplicationAdapter {
         barco.render(batch);
         iu.render(batch, emotion);
         batch.end();
-        //System.out.println(Gdx.input.getX());
-        //System.out.println(Gdx.input.getY());
     }
 
     @Override
     public void dispose() {
         batch.dispose();
-        //img.dispose();
     }
 
     public void update(float delta) {
+        // Checa o tempo sem input, para ligar ou não o modo background
         if ((System.currentTimeMillis() - tempoInicial) / 1000 > 5 && !idle) {
             System.out.println("idle");
             barco.setIdle(true);
-            mundo.setIdle(true);
             for (int i = 0; i < qntdObstaculos; i++) {
                 obstaculos[i].setIdle(true);
             }
             idle = true;
         }
+        // Sai do jogo
         if (Gdx.input.isKeyJustPressed(Keys.ESCAPE)) {
             Gdx.app.exit();
         }
+        // Liga/Desliga o modo emoção
         if (Gdx.input.isKeyJustPressed(Keys.Q)) {
             if (emotion) {
                 emotion = false;
@@ -110,24 +112,27 @@ public class MyGdxGame extends ApplicationAdapter {
                 audio.play(emotion);
             }
         }
+        // Reseta a contagem caso haja input do jogador
         if (barco.update()) {
             tempoInicial = System.currentTimeMillis();
+            // Se estava em background, desliga o modo background
             if (idle) {
                 barco.setIdle(false);
-                mundo.setIdle(false);
                 for (int i = 0; i < qntdObstaculos; i++) {
                     obstaculos[i].setIdle(false);
                 }
                 idle = false;
             }
         }
+        // Atualiza os obstáculos
         for (int i = 0; i < qntdObstaculos; i++) {
             obstaculos[i].update();
         }
+        // Checa colisão do barco com obstáculos
         if (barco.checaColisao(obstaculos)) {
             reset();
         }
+        // Atualiza IU
         iu.update();
-        // ...
     }
 }

@@ -21,29 +21,33 @@ import com.badlogic.gdx.math.Vector2;
 public class Barco {
 
     private TextureRegion[][] quadrosDaAnimacao;
-    private Vector2 posicao;
-    private Vector2 velocidade;
+    private Vector2 posicao, velocidade;
     private Animation atual, navegarPraFrente, navegarPraCima, navegarPraBaixo;
     private float tempoDaAnimacao;
     private Texture spritesheet;
     boolean idle;
 
+    // Retorna a posição em X
     public float getPosicaoX() {
         return this.posicao.x;
     }
 
+    // Retorna a posição em Y
     public float getPosicaoY() {
         return this.posicao.y;
     }
 
+    // Retorna o tamanho em X
     public double getTextureWidth() {
         return this.quadrosDaAnimacao[0][0].getRegionWidth() * 0.4;
     }
 
+    // Retorna o tamanho em Y
     public double getTextureHeight() {
         return this.quadrosDaAnimacao[0][0].getRegionHeight() * 0.4;
     }
     
+    // Liga/Desliga modo background
     public void setIdle(boolean idle){
         this.idle = idle;
     }
@@ -56,54 +60,39 @@ public class Barco {
         velocidade = new Vector2();
         posicao.x = 30;
         posicao.y = 5;
-        //posicao.y = (float) (Gdx.graphics.getHeight() - this.getTextureHeight());
         velocidade.y = 0;
         velocidade.x = 0;
         navegarPraFrente = new Animation(0.5f,
-                quadrosDaAnimacao[2][0], // 1ª linha, 1ª coluna
-                quadrosDaAnimacao[2][1], // idem, 2ª coluna
+                quadrosDaAnimacao[2][0],
+                quadrosDaAnimacao[2][1],
                 quadrosDaAnimacao[2][2],
                 quadrosDaAnimacao[2][3],
                 quadrosDaAnimacao[2][4]);
         navegarPraFrente.setPlayMode(PlayMode.LOOP_PINGPONG);
         navegarPraCima = new Animation(0.5f,
-                quadrosDaAnimacao[1][0], // 1ª linha, 1ª coluna
-                quadrosDaAnimacao[1][1], // idem, 2ª coluna
+                quadrosDaAnimacao[1][0], 
+                quadrosDaAnimacao[1][1], 
                 quadrosDaAnimacao[1][2],
                 quadrosDaAnimacao[1][3],
                 quadrosDaAnimacao[1][4]);
         navegarPraCima.setPlayMode(PlayMode.LOOP_PINGPONG);
         navegarPraBaixo = new Animation(0.5f,
-                quadrosDaAnimacao[3][0], // 1ª linha, 1ª coluna
-                quadrosDaAnimacao[3][1], // idem, 2ª coluna
+                quadrosDaAnimacao[3][0], 
+                quadrosDaAnimacao[3][1], 
                 quadrosDaAnimacao[3][2],
                 quadrosDaAnimacao[3][3],
                 quadrosDaAnimacao[3][4]);
         navegarPraBaixo.setPlayMode(PlayMode.LOOP_PINGPONG);
-        /*andarPraBaixo = new Animation(0.1f,
-                quadrosDaAnimacao[0][0], // 1ª linha, 1ª coluna
-                quadrosDaAnimacao[0][1], // idem, 2ª coluna
-                quadrosDaAnimacao[0][2],
-                quadrosDaAnimacao[0][3],
-                quadrosDaAnimacao[0][4]);
-        andarPraBaixo.setPlayMode(PlayMode.LOOP_PINGPONG);
-         andarPraCima = new Animation(0.1f,
-                quadrosDaAnimacao[2][0], // 1ª linha, 1ª coluna
-                quadrosDaAnimacao[2][1], // idem, 2ª coluna
-                quadrosDaAnimacao[2][2],
-                quadrosDaAnimacao[2][3],
-                quadrosDaAnimacao[2][4]);
-        andarPraCima.setPlayMode(PlayMode.LOOP_PINGPONG);*/
+        
         atual = navegarPraFrente;
-        //tempoDaAnimacao = 0;
     }
 
+    // Renderiza o barco
     public void render(SpriteBatch batch) {
-        //batch.draw(this.textura, this.posicaoX, this.posicaoY);
-        //batch.draw(quadrosDaAnimacao[2][0], posicao.x, posicao.y, 40, 20);
-        batch.draw((TextureRegion) atual.getKeyFrame(tempoDaAnimacao), posicao.x, posicao.y, (float) (quadrosDaAnimacao[0][0].getRegionHeight() * 0.4), (float) (quadrosDaAnimacao[0][0].getRegionWidth() * 0.4));
+        batch.draw((TextureRegion) atual.getKeyFrame(tempoDaAnimacao), posicao.x, posicao.y, (float) (this.getTextureHeight()), (float) (this.getTextureWidth()));
     }
 
+    // Atualiza o barco
     public boolean update() {
         tempoDaAnimacao += Gdx.graphics.getDeltaTime();
         posicao.x += velocidade.x * Gdx.graphics.getDeltaTime();
@@ -143,6 +132,7 @@ public class Barco {
         return true;
     }
 
+    // Checa colisao do barco com obstáculos
     public boolean checaColisao(Obstaculo[] obstaculos) {
         for (int i = 0; i < obstaculos.length; i++) {
             if ((this.posicao.x + this.getTextureWidth() >= obstaculos[i].getPosicao().x)

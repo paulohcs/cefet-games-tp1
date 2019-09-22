@@ -6,17 +6,21 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
       <group>
         <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/MyGdxGame.java</file>
+        <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/Obstaculo.java</file>
         <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/Barco.java</file>
+        <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/Mundo.java</file>
+        <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/MyInput.java</file>
       </group>
     </open-files>
     <editor-bookmarks lastBookmarkId="0" xmlns="http://www.netbeans.org/ns/editor-bookmarks/2"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
       <group>
-        <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/MyGdxGame.java</file>
-        <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/Obstaculo.java</file>
-        <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/Barco.java</file>
-        <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/Mundo.java</file>
-        <file>file:/G:/Estudo/Jogos/tp1/core/src/com/mygdx/game/MyInput.java</file>
+        <file>file:/G:/Estudo/Jogos/cefet-games-tp1/cefet-games-tp1/core/src/com/mygdx/game/Iu.java</file>
+        <file>file:/G:/Estudo/Jogos/cefet-games-tp1/cefet-games-tp1/core/src/com/mygdx/game/Audio.java</file>
+        <file>file:/G:/Estudo/Jogos/cefet-games-tp1/cefet-games-tp1/core/src/com/mygdx/game/MyGdxGame.java</file>
+        <file>file:/G:/Estudo/Jogos/cefet-games-tp1/cefet-games-tp1/core/src/com/mygdx/game/Barco.java</file>
+        <file>file:/G:/Estudo/Jogos/cefet-games-tp1/cefet-games-tp1/core/src/com/mygdx/game/Obstaculo.java</file>
+        <file>file:/G:/Estudo/Jogos/cefet-games-tp1/cefet-games-tp1/core/src/com/mygdx/game/Mundo.java</file>
       </group>
     </open-files>
   </auxiliary>
