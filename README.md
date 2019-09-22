@@ -11,8 +11,11 @@ Um endless runner onde o jogador controla um barco, desviando dos obstáculos qu
 ## Controles
 
 WASD - Movimentar o barco
+
 Esc - Sai do jogo
+
 Q - Liga/Desliga modo emoção
+
 
 ## Créditos de arte
 
